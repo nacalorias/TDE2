@@ -11,6 +11,7 @@ public class Arvore234 {
         return raiz == null;
     }
 
+    //Método principal para inserir um valor
     public void inserir(int valor) {
         if (raiz == null) {
             raiz = new No234(true);
@@ -18,7 +19,7 @@ public class Arvore234 {
             return;
         }
 
-
+        // Se a raiz está lotada, divide ela primeiro
         if (raiz.getNumChaves() == 3) {
             No234 novaRaiz = new No234(false);
             novaRaiz.setFilho(0, raiz);
@@ -29,7 +30,7 @@ public class Arvore234 {
         inserirNaoCheio(raiz, valor);
     }
 
-
+    //  Operação central da inserção
     private void dividirFilho(No234 pai, int indice, No234 cheio) {
         No234 novoNo = new No234(cheio.isFolha());
         novoNo.setNumChaves(1);
@@ -44,17 +45,18 @@ public class Arvore234 {
 
         cheio.setNumChaves(1);
 
+        // Abre espaço no pai para a chave que vai subir
         for (int j = pai.getNumChaves(); j > indice; j--) {
             pai.setFilho(j + 1, pai.getFilho(j));
             pai.setChave(j, pai.getChave(j - 1));
         }
-
+        // Conecta o novo nó e a achave do meio do pai
         pai.setFilho(indice + 1, novoNo);
         pai.setChave(indice, cheio.getChave(1));
         pai.setNumChaves(pai.getNumChaves() + 1);
     }
 
-
+    //Função recursiva que busca o local certo e insere o valor
     private void inserirNaoCheio(No234 no, int valor) {
         int i = no.getNumChaves() - 1;
 
@@ -103,7 +105,7 @@ public class Arvore234 {
         return buscarRec(no.getFilho(i), valor);
     }
 
-
+    // Impressão para visualização da árvore
     public void imprimir() {
         if (estaVazia()) {
             System.out.println("A árvore está vazia.");
@@ -124,7 +126,7 @@ public class Arvore234 {
         }
     }
 
-
+    //Método principal para remover um valor
     public void remover(int valor) {
         if (estaVazia()) {
             System.out.println("Árvore vazia. Nada a remover.");
@@ -138,6 +140,7 @@ public class Arvore234 {
         }
     }
 
+    //Lógica recursiva da remoção
     private void removerRec(No234 no, int valor) {
         int i = 0;
         while (i < no.getNumChaves() && valor > no.getChave(i)) {
@@ -170,6 +173,7 @@ public class Arvore234 {
         }
     }
 
+    // Remove uma chave de um nó interno, substituindo-a pelo predecessor ou sucessor
     private void removerInterno(No234 no, int i) {
         int valor = no.getChave(i);
         No234 filhoEsq = no.getFilho(i);
@@ -189,6 +193,7 @@ public class Arvore234 {
         }
     }
 
+    // Funções auxiliares para achar o maior/menor valor em uma subárvore
     private int getMaior(No234 no) {
         while (!no.isFolha()) {
             no = no.getFilho(no.getNumChaves());
@@ -203,6 +208,7 @@ public class Arvore234 {
         return no.getChave(0);
     }
 
+    // Garante que um filho tenha pelo menos 2 chaves
     private void preencher(No234 no, int i) {
         if (i != 0 && no.getFilho(i - 1).getNumChaves() >= 2) {
             pegarDoAnterior(no, i);
@@ -217,6 +223,7 @@ public class Arvore234 {
         }
     }
 
+    // Rotaciona chaves entre pai, filho e irmão para "emprestar" uma chave
     private void pegarDoAnterior(No234 no, int i) {
         No234 filho = no.getFilho(i);
         No234 irmao = no.getFilho(i - 1);
@@ -269,6 +276,7 @@ public class Arvore234 {
         irmao.setNumChaves(irmao.getNumChaves() - 1);
     }
 
+    // Junta dois filhos em um nó
     private void fundir(No234 no, int i) {
         No234 filho = no.getFilho(i);
         No234 irmao = no.getFilho(i + 1);
